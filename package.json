@@ -1,0 +1,38 @@
+{
+  "name": "create-json-stream",
+  "version": "1.0.0",
+  "description": "Create JSON stream",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "json-depth-stream": "^2.2.1",
+    "through2": "^3.0.1"
+  },
+  "devDependencies": {
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.2",
+    "prettier": "^1.18.2",
+    "typescript": "^3.6.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "keywords": [
+    "json",
+    "streaming"
+  ],
+  "author": "Alex0007 <Alex0007lolpvp@gmail.com>",
+  "license": "ISC",
+  "lint-staged": {
+    "*.{js,ts,tsx,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
