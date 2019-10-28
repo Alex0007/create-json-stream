@@ -1,14 +1,15 @@
 # create-json-stream
 
 ```ts
-import { createJsonStream } from 'create-json-stream';
+import { createJsonStream } from "create-json-stream";
 
 // Stream emits geojson features 1 by 1
 const stream = createJsonStream(
-    'tools/food-dominance.geojson',
+    "food-dominance.geojson",
     {
-        path: 'features',
+        path: "features",
         depth: 2
-    }, { encoding: null }
-)
+    },
+    { encoding: null }
+);
 ```
