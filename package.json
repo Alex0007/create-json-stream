@@ -1,6 +1,6 @@
 {
   "name": "create-json-stream",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Create JSON stream",
   "main": "dist/index.js",
   "scripts": {

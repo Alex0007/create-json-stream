@@ -1,8 +1,10 @@
 # create-json-stream
 
 ```ts
-// Stream emits geojson features items 1 by 1
-const stream = await createJsonStream(
+import { createJsonStream } from 'create-json-stream';
+
+// Stream emits geojson features 1 by 1
+const stream = createJsonStream(
     'tools/food-dominance.geojson',
     {
         path: 'features',

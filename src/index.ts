@@ -2,9 +2,6 @@ import * as fs from "fs";
 import * as DepthStream from "json-depth-stream";
 import * as stream from "stream";
 import * as through2 from "through2";
-import * as util from "util";
-
-const open = util.promisify(fs.open);
 
 export type JsonStreamOptions = {
     depth: number;
@@ -13,15 +10,15 @@ export type JsonStreamOptions = {
     path?: string;
 };
 
-export const createJsonStream = async (
+export const createJsonStream = (
     filepath: string,
     opts: JsonStreamOptions,
     fileOpts?: any
-): Promise<stream.Readable> => {
+): stream.Readable => {
     const json = new DepthStream(opts.depth);
     const positionsStream = new stream.Transform();
 
-    const fd = await open(filepath, "r");
+    const fd = fs.openSync(filepath, "r");
 
     json.on("visit", (path: any[], start: number, end: number) => {
         // object
