@@ -1,5 +1,7 @@
 # create-json-stream
 
+![](https://travis-ci.org/Alex0007/create-json-stream.svg?branch=master)
+
 Wrapper around [indutny/json-depth-stream](https://github.com/indutny/json-depth-stream) for easier access to emitted JSON items. Not so low-level / no need to read data by offsets.
 
 ```ts
