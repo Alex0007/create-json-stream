@@ -6,8 +6,29 @@ import * as through2 from "through2";
 export type JsonStreamOptions = {
     depth: number;
 
-    /** Need to specify path to property where array is located (if root json is object) */
-    path?: string;
+    path?: string[];
+};
+
+const _isArrayItem = (pathArr: unknown[]) => {
+    return typeof pathArr[pathArr.length - 1] === "number";
+};
+
+const _pathMatchDetect = (
+    currentPath: unknown[],
+    sourcePath: unknown[]
+): boolean => {
+    if (currentPath.join(".") === sourcePath.join(".")) {
+        return true;
+    }
+
+    if (
+        _isArrayItem(currentPath) &&
+        currentPath.slice(0, -1).join(".") === sourcePath.join(".")
+    ) {
+        return true;
+    }
+
+    return false;
 };
 
 export const createJsonStream = (
@@ -18,16 +39,21 @@ export const createJsonStream = (
     const json = new DepthStream(opts.depth);
     const positionsStream = new stream.Transform();
 
+    if (opts.depth < 1) {
+        throw new Error("Depth should be gte 1");
+    }
+
     const fd = fs.openSync(filepath, "r");
 
     json.on("visit", (path: any[], start: number, end: number) => {
-        // object
-        if (path[0] === opts.path && typeof path[1] === "number") {
-            positionsStream.emit("data", [start, end]);
-        }
+        const pathMatched =
+            opts.path && opts.path.length
+                ? _pathMatchDetect(path, opts.path)
+                : true;
 
-        // array
-        if (typeof path[0] === "number" && !opts.path) {
+        const depthMatched = opts.depth === path.length;
+
+        if (pathMatched && depthMatched) {
             positionsStream.emit("data", [start, end]);
         }
     });

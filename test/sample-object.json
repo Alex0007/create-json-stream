@@ -1,0 +1,20 @@
+{
+    "arr": [
+        1,
+        "2",
+        3
+    ],
+    "obj": {
+        "hello": "world"
+    },
+    "nested": {
+        "item": {
+            "hello": "nested"
+        }
+    },
+    "nestedPropInArray": [
+        {
+            "a": "123"
+        }
+    ]
+}
