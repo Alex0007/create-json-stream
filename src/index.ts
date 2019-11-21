@@ -5,12 +5,26 @@ import * as through2 from "through2";
 
 export type JsonStreamOptions = {
     depth: number;
-
     path?: string[];
 };
 
 const _isArrayItem = (pathArr: unknown[]) => {
     return typeof pathArr[pathArr.length - 1] === "number";
+};
+
+const _readByPosition = (fileDescriptor: number) => {
+    return through2.obj(([start, end], enc, callback) => {
+        fs.read(
+            fileDescriptor,
+            Buffer.alloc(end - start),
+            0,
+            end - start,
+            start,
+            (err, bytesRead, buffer) => {
+                callback(err, JSON.parse(buffer.toString()));
+            }
+        );
+    });
 };
 
 const _pathMatchDetect = (
@@ -65,22 +79,7 @@ export const createJsonStream = (
         })
         .pipe(json);
 
-    return positionsStream
-        .pipe(
-            through2.obj(([start, end], enc, callback) => {
-                fs.read(
-                    fd,
-                    Buffer.alloc(end - start),
-                    0,
-                    end - start,
-                    start,
-                    (err, bytesRead, buffer) => {
-                        callback(err, JSON.parse(buffer.toString()));
-                    }
-                );
-            })
-        )
-        .on("end", () => {
-            fs.close(fd, () => {});
-        });
+    return positionsStream.pipe(_readByPosition(fd)).on("end", () => {
+        fs.closeSync(fd);
+    });
 };
